@@ -36,7 +36,7 @@ class HomeFragment : BaseFragment() {
         homeViewModel.contextEventBus.subscribe { contextEvent ->
             context?.let {
                 when (contextEvent) {
-                    HomeViewModel.ContextEvent.BUTTON_CLICKED -> Unit
+                    HomeViewModel.ContextEvent.GET_REPOS_BUTTON_CLICKED -> Timber.d("HomeFragment - getRepoButtonClicked")
                     else -> Unit
                 }
             }

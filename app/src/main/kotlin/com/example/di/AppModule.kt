@@ -2,6 +2,7 @@ package com.example.di
 
 import com.example.BuildConfig
 import com.example.api.GithubApi
+import com.example.repository.GithubRepository
 import com.example.ui.home.HomeViewModel
 import com.example.ui.splash.SplashViewModel
 import com.example.util.PreferenceHelper
@@ -13,7 +14,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 val viewModelModule = module {
 
     single { SplashViewModel() }
-    single { HomeViewModel() }
+    single { HomeViewModel(get()) }
 }
 
 val networkModule = module {
@@ -35,12 +36,11 @@ val networkModule = module {
 }
 
 val repositoryModule = module {
-
-    single { HomeViewModel() }
+    single { GithubRepository(get()) }
 }
 
 val prefsModule = module {
     single { PreferenceHelper(get()) }
 }
 
-val appModules = listOf(viewModelModule, networkModule)
+val appModules = listOf(viewModelModule, networkModule, repositoryModule, prefsModule)

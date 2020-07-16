@@ -4,6 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.databinding.FragmentHomeBinding
 import com.example.ui.base.BaseFragment
 import com.example.util.autoCleared
@@ -16,6 +19,9 @@ class HomeFragment : BaseFragment() {
     private var viewBinding by autoCleared<FragmentHomeBinding>()
     private val homeViewModel: HomeViewModel by viewModel()
 
+    private lateinit var viewLayoutManager: RecyclerView.LayoutManager
+    private lateinit var viewAdapter: GitHubRepoAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -25,12 +31,32 @@ class HomeFragment : BaseFragment() {
         viewBinding.viewModel = homeViewModel
         viewBinding.lifecycleOwner = this
 
+        viewLayoutManager = LinearLayoutManager(context)
+        viewAdapter = GitHubRepoAdapter()
+
+        viewBinding.githubRepoList.apply {
+            setHasFixedSize(true)
+            layoutManager = viewLayoutManager
+            adapter = viewAdapter
+        }
+
+        homeViewModel.getGitHubReposRequest()
+
         return viewBinding.root
     }
 
     override fun onStart() {
         super.onStart()
-        Timber.d("HomeFragment - onStart")
+
+        // github repos update
+        homeViewModel.gitHubRepos.observe(
+            viewLifecycleOwner,
+            Observer { gitHubRepos ->
+                gitHubRepos?.let {
+                    viewAdapter.addHeaderAndSubmitList(it)
+                }
+            }
+        )
 
         // click events
         homeViewModel.contextEventBus.subscribe { contextEvent ->

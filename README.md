@@ -1,6 +1,13 @@
 # Android starter project
 
-Basic starter Android application using Koin, Retrofit, Coroutines, RxKotlin & Navigation Component
+Basic starter Android application
+
+## Libraries Used
+- Koin
+- Retrofit
+- Coroutines
+- RxKotlin
+- Navigation Component
 
 ### ktlint
 
